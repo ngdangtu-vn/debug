@@ -1,0 +1,23 @@
+services:
+  duckdb_ui:
+    build:
+      args: { DDB_VER: 1.4.3 }
+      dockerfile: Dockerfile
+      context: .
+    image: duckdb-oops:0.1-segfault
+    hostname: duckdb.ui
+    networks: [ duckdb.oops ]
+    volumes:
+      - ./warehouse:/wh
+    command: [ "/duckdb", "-ui" ]
+
+  reversed_proxy:
+    image: caddy:2.11-alpine
+    networks: [ duckdb.oops ]
+    ports: [ "6009:6009" ]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on: [ duckdb_ui ]
+
+networks:
+  duckdb.oops: { driver: bridge }

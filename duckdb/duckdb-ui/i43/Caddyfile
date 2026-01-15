@@ -1,0 +1,13 @@
+{
+	auto_https disable_redirects
+	local_certs
+}
+
+
+duckdb.ui:4213 {
+    reverse_proxy 0.0.0.0:6009 {
+        header_up Host 0.0.0.0:4213
+        header_up Origin http://0.0.0.0:4213
+        header_up Referer http://0.0.0.0:4213/
+    }
+}
